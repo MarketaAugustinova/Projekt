@@ -1,0 +1,20 @@
+Rostou v průběhu let mzdy ve všech odvětvích, nebo v některých klesají?
+
+Vytvoření pohledu "prumer_mzdy_srov_roky" pro výpočet průměrných mezd a výběr let pro srovnatelné období. 
+Dotazem (ř.16) lze zjistit průměrné mzdy pro včechna odvětví dohromady v jednotlivých letech, je vidět pokles průměrné mzdy 
+v roce 2013 oproti roku 2012. 
+
+V ř.22 a ř.31 následují dotazy na průměrné mzdy v jedn. odvětvích a jejich rozdíl v jed. letech. 
+
+Ř.41 vytvoření pohledu pro rozdíl mezd v jedn. letech pro jedn. odvětví. 
+Ř.51 nový sloupec pro rozlišení vzestupu nebo poklesu mezd. 
+Ř.57 připojení názvu odvětví
+
+Ř.66 vytvoření výsledné pomocné tabulky "zmeny_mezd" pro odpověď na otázku a zjištění dalších podrobností. 
+
+Ř.74 dotaz na odvětví a roky ve kterých poklesla průměrná mzda pro dané odvětví 
+Ř.80 dotaz na všechna odvětví, ve kterých alespoň v jednom roce poklesla průměrná mzda
+Ř.89 dotaz na odvětví, ve kterém nikdy nepoklesla mzda 
+Ř.97 dotaz na počet let ve kterých poklesla prům. mzda v jedn. odvětvích
+Ř.103 dotaz na počet odvětví ve kterých poklesla prům. mzda v jednotlivých letech 
+
