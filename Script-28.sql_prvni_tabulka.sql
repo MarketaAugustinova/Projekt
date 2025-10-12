@@ -95,13 +95,13 @@ WHERE zmena_mzdy = 'pokles'
 ORDER BY industry_branch_code ); 
 
 --dotaz na cetnost poklesu mezd v jedn. odvetvi
-SELECT name, count (zmena_mzdy)
+SELECT name, count (zmena_mzdy) AS pocet_let
 FROM zmeny_mezd zm
 GROUP BY name, zmena_mzdy 
 HAVING zmena_mzdy = 'pokles'; 
 
 --dotaz na rok s poklesem mezd v nejvice odvetvich 
-SELECT dalsi_rok, count (zmena_mzdy)
+SELECT dalsi_rok, count (zmena_mzdy) AS pocet_odvetvi
 FROM zmeny_mezd zm
 GROUP BY dalsi_rok, zmena_mzdy 
 HAVING zmena_mzdy = 'pokles'
