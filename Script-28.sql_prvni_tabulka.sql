@@ -19,14 +19,40 @@ FROM prumerne_mzdy_srov_roky pmsr
 GROUP BY payroll_year 
 ORDER BY payroll_year; 
 
---rozdil mezd v nasl. letech v jedn. odvetvich 
+-- mzdy v nasl. dvou letech v jedn. odvetvich 
 SELECT pmsr.industry_branch_code, 
 		pmsr.payroll_year, pmsr.prum_mzda_v_odvetvi, 
 		pmsr2.payroll_year, pmsr2.prum_mzda_v_odvetvi
 FROM prumerne_mzdy_srov_roky pmsr 
 JOIN prumerne_mzdy_srov_roky pmsr2 
 	ON pmsr.industry_branch_code = pmsr2.industry_branch_code 
-		AND pmsr.payroll_year = pmsr2.payroll_year - 1;
+		AND pmsr.payroll_year = pmsr2.payroll_year - 1; 
+
+--rozdil mezd
+SELECT pmsr.industry_branch_code, 
+		pmsr.payroll_year, pmsr.prum_mzda_v_odvetvi, 
+		pmsr2.payroll_year, pmsr2.prum_mzda_v_odvetvi,
+		pmsr2.prum_mzda_v_odvetvi - pmsr.prum_mzda_v_odvetvi AS rozdil_mezd
+FROM prumerne_mzdy_srov_roky pmsr 
+JOIN prumerne_mzdy_srov_roky pmsr2 
+	ON pmsr.industry_branch_code = pmsr2.industry_branch_code 
+		AND pmsr.payroll_year = pmsr2.payroll_year - 1; 
+
+CREATE VIEW rozdil_mezd_srov_roky AS 
+SELECT pmsr.industry_branch_code, 
+		pmsr.payroll_year AS rok, pmsr.prum_mzda_v_odvetvi AS mzda_prvni_rok, 
+		pmsr2.payroll_year AS dalsi_rok, pmsr2.prum_mzda_v_odvetvi AS mzda_dalsi_rok,
+		pmsr2.prum_mzda_v_odvetvi - pmsr.prum_mzda_v_odvetvi AS rozdil_mezd
+		FROM prumerne_mzdy_srov_roky pmsr 
+JOIN prumerne_mzdy_srov_roky pmsr2 
+	ON pmsr.industry_branch_code = pmsr2.industry_branch_code 
+		AND pmsr.payroll_year = pmsr2.payroll_year - 1; 
+
+--zjisteni pokles/vzestup mezd
+SELECT industry_branch_code, rok, dalsi_rok, rozdil_mezd,
+	CASE WHEN rozdil_mezd > 0 THEN 'vzestup' ELSE 'pokles' 
+		END AS zmena_mzdy
+FROM rozdil_mezd_srov_roky rmsr;
 
 
 
