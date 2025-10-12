@@ -13,10 +13,21 @@ WHERE value_type_code = 5958 AND payroll_year BETWEEN 2006 AND 2018
 GROUP BY industry_branch_code, payroll_year
 ORDER BY payroll_year, industry_branch_code;
 
-
+-- prumerne mzdy po letech vsechna odvetvi dohromady:
 SELECT payroll_year, round (AVG(prum_mzda_v_odvetvi)::NUMERIC,2)
 FROM prumerne_mzdy_srov_roky pmsr 
 GROUP BY payroll_year 
-ORDER BY payroll_year;
+ORDER BY payroll_year; 
+
+--rozdil mezd v nasl. letech v jedn. odvetvich 
+SELECT pmsr.industry_branch_code, 
+		pmsr.payroll_year, pmsr.prum_mzda_v_odvetvi, 
+		pmsr2.payroll_year, pmsr2.prum_mzda_v_odvetvi
+FROM prumerne_mzdy_srov_roky pmsr 
+JOIN prumerne_mzdy_srov_roky pmsr2 
+	ON pmsr.industry_branch_code = pmsr2.industry_branch_code 
+		AND pmsr.payroll_year = pmsr2.payroll_year - 1;
+
+
 
 
