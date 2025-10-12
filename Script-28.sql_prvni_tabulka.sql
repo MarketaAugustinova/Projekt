@@ -92,7 +92,20 @@ FROM zmeny_mezd zm
 WHERE name NOT IN (SELECT name
 FROM zmeny_mezd zm 
 WHERE zmena_mzdy = 'pokles' 
-ORDER BY industry_branch_code );
+ORDER BY industry_branch_code ); 
+
+--dotaz na cetnost poklesu mezd v jedn. odvetvi
+SELECT name, count (zmena_mzdy)
+FROM zmeny_mezd zm
+GROUP BY name, zmena_mzdy 
+HAVING zmena_mzdy = 'pokles'; 
+
+--dotaz na rok s poklesem mezd v nejvice odvetvich 
+SELECT dalsi_rok, count (zmena_mzdy)
+FROM zmeny_mezd zm
+GROUP BY dalsi_rok, zmena_mzdy 
+HAVING zmena_mzdy = 'pokles'
+ORDER BY dalsi_rok ; 
 
 
 
