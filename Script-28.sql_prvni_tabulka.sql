@@ -54,6 +54,47 @@ SELECT industry_branch_code, rok, dalsi_rok, rozdil_mezd,
 		END AS zmena_mzdy
 FROM rozdil_mezd_srov_roky rmsr;
 
+-- pripojeni nazvu odvetvi
+SELECT rmsr.industry_branch_code, cpib."name", rmsr.rok, rmsr.dalsi_rok, rmsr.rozdil_mezd,
+	CASE WHEN rozdil_mezd > 0 THEN 'vzestup' ELSE 'pokles' 
+		END AS zmena_mzdy
+FROM rozdil_mezd_srov_roky rmsr
+	JOIN czechia_payroll_industry_branch cpib 
+	ON cpib.code = rmsr.industry_branch_code; 
+
+--vysledna tabulka
+CREATE TABLE zmeny_mezd AS 
+	SELECT rmsr.industry_branch_code, cpib."name", rmsr.rok, rmsr.dalsi_rok, rmsr.rozdil_mezd,
+	CASE WHEN rozdil_mezd > 0 THEN 'vzestup' ELSE 'pokles' 
+		END AS zmena_mzdy
+FROM rozdil_mezd_srov_roky rmsr
+	JOIN czechia_payroll_industry_branch cpib 
+	ON cpib.code = rmsr.industry_branch_code; 
+
+--dotaz na pokles mzdy
+SELECT *
+FROM zmeny_mezd zm
+WHERE zmena_mzdy = 'pokles' 
+ORDER BY industry_branch_code ; 
+
+--dotaz na odvetvi s poklesem mzdy
+SELECT DISTINCT name
+FROM zmeny_mezd zm 
+WHERE name IN (SELECT name
+				FROM zmeny_mezd zm 
+				WHERE zmena_mzdy = 'pokles' 
+				ORDER BY industry_branch_code);
+
+
+--dotaz na odvetvi bez poklesu mzdy
+SELECT DISTINCT name 
+FROM zmeny_mezd zm 
+WHERE name NOT IN (SELECT name
+FROM zmeny_mezd zm 
+WHERE zmena_mzdy = 'pokles' 
+ORDER BY industry_branch_code );
+
+
 
 
 
