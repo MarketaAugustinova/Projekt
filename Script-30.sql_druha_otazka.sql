@@ -50,7 +50,7 @@ JOIN prum_ceny pc ON pmsr.payroll_year = pc.rok
 JOIN czechia_price_category cpc ON pc.category_code = cpc.code
 WHERE name IN ('Mléko polotučné pasterované', 'Chléb konzumní kmínový' )
 GROUP BY rok, name, pc.prum_cena
-ORDER BY rok;
+ORDER BY name, rok;
 
 
 
