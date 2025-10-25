@@ -119,4 +119,20 @@ JOIN platy_a_ceny pac2
 		AND pac.rok = pac2.rok - 1; 
 
 
+--novy pohlad z finalni tabulky
+--kopie radku 41
+CREATE VIEW rozdil_mezd_pac AS
+SELECT pac.industry_branch_code, 
+		pac.rok, pac.prum_mzda_v_odvetvi, 
+		pac2.rok AS dalsi_rok, pac2.prum_mzda_v_odvetvi AS pr_mzda_dalsi_rok,
+		pac2.prum_mzda_v_odvetvi - pac.prum_mzda_v_odvetvi AS rozdil_mezd
+FROM platy_a_ceny pac  
+JOIN platy_a_ceny pac2  
+	ON pac.industry_branch_code = pac2.industry_branch_code 
+		AND pac.rok = pac2.rok - 1;
+
+SELECT *
+FROM rozdil_mezd_pac rmp;
+
+
 
