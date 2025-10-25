@@ -132,7 +132,25 @@ JOIN platy_a_ceny pac2
 		AND pac.rok = pac2.rok - 1;
 
 SELECT *
-FROM rozdil_mezd_pac rmp;
+FROM rozdil_mezd_pac rmp; 
+
+--zjisteni pokles/vzestup mezd z finalni tabulky
+--kopie radku 51 
+SELECT industry_branch_code, rok, dalsi_rok, rozdil_mezd,
+	CASE WHEN rozdil_mezd > 0 THEN 'vzestup' ELSE 'pokles' 
+		END AS zmena_mzdy
+FROM rozdil_mezd_pac; 
+
+
+-- pripojeni nazvu odvetvi
+-- kopie radku 57
+--z fin. tab.
+SELECT rmp.industry_branch_code, cpib."name", rmp.rok, rmp.dalsi_rok, rmp.rozdil_mezd,
+	CASE WHEN rozdil_mezd > 0 THEN 'vzestup' ELSE 'pokles' 
+		END AS zmena_mzdy
+FROM rozdil_mezd_pac rmp
+	JOIN czechia_payroll_industry_branch cpib 
+	ON cpib.code = rmp.industry_branch_code; 
 
 
 
