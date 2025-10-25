@@ -14,11 +14,12 @@ Z dostupných tabulek při vorbě předch. dotazu zjštěno, že data o mzdách 
 
 Ř.23 přidání názvu kategorií
 
-Ř.29 výběr produktů potřbných pro zodpovězení otázky (mléko, chléb)
+Ř.29 výběr produktů potřebných pro zodpovězení otázky (mléko, chléb)
 
 Ř.36 kontrola údajů spojených tabulek s podmínkou pro výběr
 
 
 
 Ř.44 výběr sloupců a výpočty, které potřebujeme pro zodpovězení otázek 
+
 
