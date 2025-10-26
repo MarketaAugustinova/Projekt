@@ -118,6 +118,29 @@ JOIN platy_a_ceny pac2
 		AND pac.rok = pac2.rok - 1
 GROUP BY pac.industry_branch_code, pac.rok, pac.prum_mzda_v_odvetvi, pac2.rok, pac2.prum_mzda_v_odvetvi;
 
+---pr. mzdy ve vsech odvetvi
+SELECT rok, round(AVG(prum_mzda_v_odvetvi)::NUMERIC,2) AS prum_mzda_celkem
+FROM platy_a_ceny pac 
+GROUP BY rok; 
+
+---pr. mzdy ve vsech odvetvi 2 roky po sobe
+SELECT pac.rok, round(AVG(pac.prum_mzda_v_odvetvi)::NUMERIC,2) AS prum_mzda_celkem, 
+		pac2.rok, round(AVG(pac2.prum_mzda_v_odvetvi)::NUMERIC,2) AS prum_mzda_celkem_2
+FROM platy_a_ceny pac 
+JOIN platy_a_ceny pac2 ON pac.rok = pac2.rok - 1
+GROUP BY pac.rok, pac2.rok;
+
+
+---podil a procento
+SELECT pac.rok, round(AVG(pac.prum_mzda_v_odvetvi)::NUMERIC,2) AS prum_mzda_celkem, 
+		pac2.rok, round(AVG(pac2.prum_mzda_v_odvetvi)::NUMERIC,2) AS prum_mzda_celkem_2,
+		round(AVG(pac2.prum_mzda_v_odvetvi)/AVG(pac.prum_mzda_v_odvetvi)::NUMERIC,2)*100 -100 AS procento_vzrustu
+FROM platy_a_ceny pac 
+JOIN platy_a_ceny pac2 ON pac.rok = pac2.rok - 1
+GROUP BY pac.rok, pac2.rok
+ORDER BY procento_vzrustu desc;
+
+
 
 
 
