@@ -73,18 +73,19 @@ SELECT rok +1 AS hodnoceny_rok, potravina, round(cena_dalsi_rok/prum_cena*100 - 
 		WHEN  (cena_dalsi_rok/prum_cena*100 - 100) > 0 THEN 'zdrazeni'
 		ELSE 'zlevneni' END AS kvalifikace 
 	FROM platy_a_ceny pac
-GROUP BY rok, potravina, cena_dalsi_rok, prum_cena; 
+GROUP BY rok, potravina, cena_dalsi_rok, prum_cena
+ORDER BY procento_navyseni desc; 
 
 --prumerne zdrazeni vsech potravin
 SELECT hodnoceny_rok, round (AVG(procento_navyseni)::NUMERIC, 1) AS prum_zdrazeni_vsech_potravin
 FROM zdrazeni z 
-GROUP BY hodnoceny_rok
+GROUP BY hodnoceny_rok;
 
---se mzdama
+
 SELECT hodnoceny_rok, round (AVG(procento_navyseni)::NUMERIC, 1) AS prum_zdrazeni_vsech_potravin
 FROM zdrazeni z 
 GROUP BY hodnoceny_rok
-ORDER BY prum_zdrazeni_vsech_potravin ; 
+ORDER BY prum_zdrazeni_vsech_potravin desc; 
 
 --kopie ze scriptu 27 radek 37
 SELECT pac.industry_branch_code, 
@@ -138,7 +139,28 @@ SELECT pac.rok, round(AVG(pac.prum_mzda_v_odvetvi)::NUMERIC,2) AS prum_mzda_celk
 FROM platy_a_ceny pac 
 JOIN platy_a_ceny pac2 ON pac.rok = pac2.rok - 1
 GROUP BY pac.rok, pac2.rok
-ORDER BY procento_vzrustu desc;
+ORDER BY procento_vzrustu desc; 
+
+--pohled na procento vzrustu
+CREATE VIEW vzrust_mezd as
+SELECT pac.rok, round(AVG(pac.prum_mzda_v_odvetvi)::NUMERIC,2) AS prum_mzda, 
+		pac2.rok AS dalsi_rok, round(AVG(pac2.prum_mzda_v_odvetvi)::NUMERIC,2) AS prum_mzda_dalsi_rok,
+		round(AVG(pac2.prum_mzda_v_odvetvi)/AVG(pac.prum_mzda_v_odvetvi)::NUMERIC,2)*100 -100 AS procento_vzrustu
+FROM platy_a_ceny pac 
+JOIN platy_a_ceny pac2 ON pac.rok = pac2.rok - 1
+GROUP BY pac.rok, pac2.rok
+ORDER BY pac.rok;
+
+SELECT *
+FROM vzrust_mezd vm 
+
+--zdrazeni a vzrust mezd
+SELECT hodnoceny_rok, round (AVG(procento_navyseni)::NUMERIC, 1) AS prum_zdrazeni_vsech_potravin,
+		procento_vzrustu 
+FROM zdrazeni z 
+	JOIN vzrust_mezd vm ON z.hodnoceny_rok = vm.dalsi_rok
+GROUP BY hodnoceny_rok, procento_vzrustu 
+ORDER BY hodnoceny_rok; 
 
 
 
